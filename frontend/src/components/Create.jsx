@@ -4,6 +4,7 @@ export const Create = () => {
     const [name, setName] =useState("");
     const [email, setEmail] =useState("");
     const [age, setAge] =useState(0);
+    const [error,setError]=useState("");
 
     console.log(name,email,age);
 
@@ -12,7 +13,7 @@ export const Create = () => {
 
         const addUser = {name,email,age};
 
-        const  response = await fetch('http://localhost:4000', {
+        const  response = await fetch('http://localhost:4000',addUser, {
             method: 'POST',
             body: JSON.stringify(addUser),
             headers: {
@@ -23,16 +24,26 @@ export const Create = () => {
 
     const result = await response.json();
     if(!response.ok){
+        alert("Soemething bad happened")
         console.log(result.error);
+        setError(result.error);
     }
     if(response.ok){
+        alert("data sent to database!")
         console.log(result);
+        setError("");
+        setName("");
+        setEmail("");
+        setAge(0);
     }
 
 };
     
   return (
     <div className="container my-2">
+        {error && <div class="alert alert-danger">
+    {error}
+</div>}
         <h2 className="text-center">Enter the data</h2>
 
         <form onSubmit={handlesubmit}>
